@@ -1,0 +1,177 @@
+<html>
+<head>
+    
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="../auth.js"></script>
+    <script src="../OSMAPI.js"></script>
+    <script src="../OSM_js_editor.js"></script>    
+</head>
+<body>
+
+
+
+<legend>Entrer le nom du noeud que vous voulez éditer :</legend>
+<!-- Text input-->
+<div class="form-group">
+  <div class="col-md-4">
+  <input id="textinput" name="textinput" type="text" class="form-control input-md">
+  <span class="help-block">Par exemple : 532031656 ou 1429442329</span>  
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <div class="col-md-4">
+	    <button id="singlebutton" name="singlebutton" class="btn btn-primary" onclick='test()'>Éditer</button>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		<h4 class="modal-title">Édition du bar dans OpenBeerMap</h4>
+
+      </div>
+      <div class="modal-body">
+	  <form class="form-horizontal" name="edit_form">
+        <fieldset>
+        <!-- OSM id input-->
+        <div class="form-group">
+          <div class="col-md-4">
+                <input id="OSM_id" name="OSM_id" class="form-control input-md hidden" type="text">
+          </div>
+        </div>
+        <!-- Name input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="textinput">Nom</label>  
+          <div class="col-md-4">
+                <input id="bar-name" name="bar-name" class="form-control input-md" type="text">
+          </div>
+        </div>
+        <!-- Beer Checkboxes -->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="checkboxes">Bière pression dispo</label>
+          <div class="col-md-4">
+          <div class="checkbox">
+            <label for="checkboxes-0">
+              <input type="checkbox" name="beer" id="checkboxes-0" value="chouffe">
+              Chouffe
+            </label>
+	        </div>
+          <div class="checkbox">
+            <label for="checkboxes-1">
+              <input type="checkbox" name="beer" id="checkboxes-1" value="leffe">
+              Leffe
+            </label>
+	        </div>
+          <div class="checkbox">
+            <label for="checkboxes-2">
+              <input type="checkbox" name="beer" id="checkboxes-2" value="tripel_karmeliet">
+              Carmélite Triple
+            </label>
+	        </div>
+          <div class="checkbox">
+            <label for="checkboxes-3">
+              <input type="checkbox" name="beer" id="checkboxes-3" value="guinness">
+              Guinness
+            </label>
+	        </div>
+          <div class="checkbox">
+            <label for="checkboxes-4">
+              <input type="checkbox" name="beer" id="checkboxes-4" value="chimay">
+              Chimay
+            </label>
+	        </div>
+          <div class="checkbox">
+            <label for="checkboxes-5">
+              <input type="checkbox" name="beer" id="checkboxes-5" value="amstel">
+              Amstel
+            </label>
+	        </div>	
+          <div class="checkbox">
+            <label for="checkboxes-6">
+              <input type="checkbox" name="beer" id="checkboxes-6" value="carlsberg">
+              Carlsberg
+            </label>
+	        </div>        
+          </div>
+        </div>
+
+        <!-- Wifi  Radios  -->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="radios">Wifi</label>
+          <div class="col-md-4"> 
+            <label class="radio-inline" for="radios-0">
+              <input name="wifi" id="radios-0" value="wlan" type="radio">
+              oui
+            </label> 
+            <label class="radio-inline" for="radios-1">
+              <input name="wifi" id="radios-1" value="no" type="radio">
+              non
+            </label> 
+            <label class="radio-inline" for="radios-2">
+              <input name="wifi" id="radios-2" value="chaispas" type="radio">
+              peut-être
+            </label>
+          </div>
+        </div>
+
+        <!-- Opening_hours input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="opening_hours">Heures d'ouverture</label>  
+          <div class="col-md-4">
+          <input id="opening_hours" name="opening_hours" class="form-control input-md" type="text" disabled>
+          <span class="help-block">exemple : Mo-Fr 11:30-20:00</span>  
+          </div>
+        </div>
+
+        <!-- Happy_hours input-->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="happy_hours">Happy Hours</label>  
+          <div class="col-md-4">
+          <input id="happy_hours" name="happy_hours" class="form-control input-md" type="text" disabled>
+          <span class="help-block">exemple : Mo-Fr 18:30-20:00</span>  
+          </div>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="singlebutton"></label>
+          <div class="col-md-4">
+            <button id="singlebutton" name="singlebutton" class="btn btn-success" onClick="form_from_user(edit_form)">Enregistrer</button>
+          </div>
+        </div>
+        <!-- Button -->
+        <div class="form-group">
+          <div class="col-md-4">
+<a href="http://www.openstreetmap.org/" target="blank" id="singlelink" class="btn btn-link">Éditer directement dans OpenStreetMap</a><br> 
+          </div>
+        </div>
+		
+        </fieldset>
+        </form>
+
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<
+<script language="javascript">
+function test(){
+OSMid = document.getElementById('textinput').value
+init_form_from_OSM(edit_form,OSMid)
+$('#myModal').modal()
+};
+</script>
+</body>
+</html>
