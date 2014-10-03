@@ -5,7 +5,7 @@
 function get_node(id){
         var xhr = new XMLHttpRequest();
 
-        xhr.open("GET", "http://api.openstreetmap.org/api/0.6/node/"+id, false);
+        xhr.open("GET", "https://api.openstreetmap.org/api/0.6/node/"+id, false);
         xhr.setRequestHeader("Authorization", basic_auth());
         xhr.send();
 
@@ -90,7 +90,7 @@ function put_node(xml, changeset_id, id){
         */
         
         var xhr = new XMLHttpRequest();
-        xhr.open("PUT", "http://api.openstreetmap.org/api/0.6/node/"+id, false);
+        xhr.open("PUT", "https://api.openstreetmap.org/api/0.6/node/"+id, false);
         xhr.setRequestHeader("Authorization", basic_auth());
         xhr.send(xml);
 
@@ -102,7 +102,7 @@ function put_node(xml, changeset_id, id){
 function close_changeset(id){ 
 
         var xhr = new XMLHttpRequest();
-        xhr.open("PUT", "http://api.openstreetmap.org/api/0.6/changeset/"+id+"/close", false);
+        xhr.open("PUT", "https://api.openstreetmap.org/api/0.6/changeset/"+id+"/close", false);
         xhr.setRequestHeader("Authorization", basic_auth());
         xhr.send();
 
@@ -115,7 +115,7 @@ function put_changeset(){
         xml = "<osm> <changeset> <tag k='created_by' v='OpenBeerMap javascript editor'/> <tag k='comment' v='OpenBeerMap - Modification de bar'/> </changeset></osm>";
 
         var xhr = new XMLHttpRequest();
-        xhr.open("PUT", "http://api.openstreetmap.org/api/0.6/changeset/create", false);
+        xhr.open("PUT", "https://api.openstreetmap.org/api/0.6/changeset/create", false);
         xhr.setRequestHeader("Authorization", basic_auth());
         xhr.send(xml);
 
