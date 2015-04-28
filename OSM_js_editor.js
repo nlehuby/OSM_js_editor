@@ -14,11 +14,11 @@ Array.prototype.del = function(val){
 
 function init_form_from_OSM(form,OSM_id) { 
         // récupération des valeurs actuelles 
-        OSM_xml = get_node(OSM_id)
+        OSM_xml = get_node_or_way(OSM_id, "node")
         beer_src = get_tag(OSM_xml,"brewery").toLowerCase()
-        name_src = get_tag(OSM_xml,"name") ; if (name_src === "non_fourni") {name_src = ""}  ;   
-        opening_src = get_tag(OSM_xml,"opening_hours") ; if (opening_src === "non_fourni") {opening_src = ""}; 
-        happy_src = get_tag(OSM_xml,"happy_hours") ; if (happy_src === "non_fourni") {happy_src = ""}; 
+        name_src = get_tag(OSM_xml,"name") ; if (name_src == "undefined" ) {name_src = ""}  ;   
+        opening_src = get_tag(OSM_xml,"opening_hours") ; if (opening_src == "undefined") {opening_src = ""}; 
+        happy_src = get_tag(OSM_xml,"happy_hours") ; if (happy_src == "undefined") {happy_src = ""}; 
         wifi_src = get_tag(OSM_xml,"internet_access").toLowerCase()
         otherbeer_src = get_tag(OSM_xml,"brewery:note") ; if (otherbeer_src === "non_fourni") {otherbeer_src = ""}  ; 
         
@@ -62,7 +62,7 @@ function form_from_user(form) {
         OSM_id = document.getElementById('OSM_id').value
          
         // récupération des valeurs de bière actuelles       
-        OSM_xml = get_node(OSM_id)
+        OSM_xml = get_node_or_way(OSM_id, "node")
         var beer_tab = get_tag(OSM_xml,"brewery").toLowerCase().split(';');
         
         
@@ -103,20 +103,20 @@ function form_from_user(form) {
         var envoi = 0   
 
         //TODO : il y a des envois vides à OSM ; refacto à prévoir ici
-        if (beer_tab.length > 0) {edit_tag(OSM_xml,"brewery",brewery); envoi = 1}
+        if (beer_tab.length > 0) {edit_tag(OSM_xml,"node", "brewery",brewery); envoi = 1}
         // s'il n'y avait qu'une bière, et que l'utilisateur la décoche, beer_tab devient vide, il faut donc supprimer le tag
         else {if((brewery != get_tag(OSM_xml,"brewery")) && (beer_tab.length != 0)) {del_tag(OSM_xml,"brewery");envoi=2}}
-        if (wifi != "chaispas") {edit_tag(OSM_xml,"internet_access", wifi); envoi = 3}
+        if (wifi != "chaispas") {edit_tag(OSM_xml,"node","internet_access", wifi); envoi = 3}
         // si wifi n'était pas vide, mais que maintenant, c'est chaispas, il faut supprimer le tag
         else {if(get_tag(OSM_xml,"internet_access") != "non_fourni") {del_tag(OSM_xml,"internet_access");envoi=4}}
-        if ((name != get_tag(OSM_xml,"name")) && (name != "")) {edit_tag(OSM_xml, "name", name); envoi = 5}
+        if ((name != get_tag(OSM_xml,"name")) && (name != "")) {edit_tag(OSM_xml,"node", "name", name); envoi = 5}
         //si nom est vide mais qu'avant il y avait qqch, il faut supprimer le tag
         else {if ((get_tag(OSM_xml,"name") != "non_fourni") && (name == "")) {del_tag(OSM_xml, "name"); envoi = 6}}
-    	if ((otherbeer_src != get_tag(OSM_xml,"brewery:note")) && (otherbeer_src != "")) {edit_tag(OSM_xml, "brewery:note", otherbeer_src); envoi = 7}
+    	if ((otherbeer_src != get_tag(OSM_xml,"brewery:note")) && (otherbeer_src != "")) {edit_tag(OSM_xml,"node", "brewery:note", otherbeer_src); envoi = 7}
     
         /*
-        if ((opening != get_tag(OSM_xml,"opening_hours")) && (opening != "")) {edit_tag(OSM_xml, "opening_hours", opening); envoi = 1}
-        if ((happy != get_tag(OSM_xml,"happy_hours")) && (happy != "")) {edit_tag(OSM_xml, "happy_hours", happy); envoi = 1}
+        if ((opening != get_tag(OSM_xml,"opening_hours")) && (opening != "")) {edit_tag(OSM_xml,"node", "opening_hours", opening); envoi = 1}
+        if ((happy != get_tag(OSM_xml,"happy_hours")) && (happy != "")) {edit_tag(OSM_xml,"nde", "happy_hours", happy); envoi = 1}
         */
     
     	//envoi à OSM
@@ -125,12 +125,15 @@ function form_from_user(form) {
                 {
                 //ouvrir un changeset
                 changeset_id = put_changeset()
-                
-                //envoyer le nouveau node
-                put_node(OSM_xml, changeset_id, OSM_id)
-                
-                //fermer le changeset
-                close_changeset(changeset_id);
+                if (changeset_id != "Couldn't authenticate you")
+                    {
+                    //envoyer le nouveau node
+                    put_node_or_way(OSM_xml, changeset_id, OSM_id, "node")
+                    
+                    //fermer le changeset
+                    close_changeset(changeset_id);
+                    }
+                else {console.log("auth fail")}
                 }
     
         //post-processing
