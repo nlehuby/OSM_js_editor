@@ -112,7 +112,7 @@ function form_from_user(form) {
         if ((name != get_tag(OSM_xml,"name")) && (name != "")) {edit_tag(OSM_xml, "name", name); envoi = 5}
         //si nom est vide mais qu'avant il y avait qqch, il faut supprimer le tag
         else {if ((get_tag(OSM_xml,"name") != "non_fourni") && (name == "")) {del_tag(OSM_xml, "name"); envoi = 6}}
-    	if ((otherbeer != get_tag(OSM_xml,"brewery:note")) && (otherbeer != "")) {edit_tag(OSM_xml, "brewery:note", otherbeer); envoi = 7}
+    	if ((otherbeer_src != get_tag(OSM_xml,"brewery:note")) && (otherbeer_src != "")) {edit_tag(OSM_xml, "brewery:note", otherbeer_src); envoi = 7}
     
         /*
         if ((opening != get_tag(OSM_xml,"opening_hours")) && (opening != "")) {edit_tag(OSM_xml, "opening_hours", opening); envoi = 1}

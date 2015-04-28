@@ -125,7 +125,7 @@ function close_changeset(id){
 }
 
 function put_changeset(){ 
-        xml = "<osm> <changeset> <tag k='created_by' v='OpenBeerMap javascript editor'/> <tag k='comment' v='OpenBeerMap - Modification de bar'/> </changeset></osm>";
+        xml = "<osm> <changeset> <tag k='created_by' v='OpenBeerMap javascript editor'/> <tag k='comment' v='OSM js editor - test, developpement'/> </changeset></osm>";
 
         var xhr = new XMLHttpRequest();
         xhr.open("PUT", "https://api.openstreetmap.org/api/0.6/changeset/create", false);
