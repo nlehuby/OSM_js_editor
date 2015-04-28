@@ -1,2 +1,4 @@
 auth.js
-.codio
+auth.js~
+*.js~
+*.*~
