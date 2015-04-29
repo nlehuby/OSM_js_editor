@@ -9,9 +9,9 @@ function init_form_from_OSM(form,OSM_id) {
     
         //affichage des bandeaux d'avertissement
         if (auth.authenticated())
-        { auth.xhr({ method: 'GET', path: '/api/0.6/node/' + OSM_id }, function(err, res){console.log(res); OSM_xml = res; /* ko, passer toute la fonction en callback TODO*/ } );
-        document.getElementById('alert_no_auth').style.display = 'none';
-        document.getElementById('alert_auth').style.display = 'block';        
+        { 
+            document.getElementById('alert_no_auth').style.display = 'none';
+            document.getElementById('alert_auth').style.display = 'block';        
         }
         else
         {
@@ -96,17 +96,31 @@ function form_from_user(form) {
     	console.log(envoi)
         if (envoi != 0)
                 {
-                //ouvrir un changeset
-                changeset_id = put_changeset()
-                if (changeset_id != "Couldn't authenticate you")
-                    {
-                    //envoyer le nouveau node
-                    put_node_or_way(OSM_xml, changeset_id, OSM_id, "node")
-                    
-                    //fermer le changeset
-                    close_changeset(changeset_id);
+                    if (auth.authenticated())
+                    { 
+                        //TODO
+                        //ouvrir un changeset avec oauth
+                        // en callback, envoyer le noeud
+                        // en callback, fermer le changeset
+                        // en callback, console.log("ça a fonctionné")
+                        //auth.xhr({ method: 'GET', path: '/api/0.6/node/' + OSM_id }, function(err, res){console.log(res); } );
                     }
-                else {console.log("auth fail")}
+                    else
+                    {
+                        //ouvrir un changeset
+                        changeset_id = put_changeset()
+                        if (changeset_id != "Couldn't authenticate you")
+                            {
+                            //envoyer le nouveau node
+                            put_node_or_way(OSM_xml, changeset_id, OSM_id, "node")
+                            
+                            //fermer le changeset
+                            close_changeset(changeset_id);
+                            }
+                        else {console.log("auth fail")}
+                    }
+                
+
                 }
     
         //post-processing éventuel
