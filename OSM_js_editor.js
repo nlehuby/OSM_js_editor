@@ -98,12 +98,57 @@ function form_from_user(form) {
                 {
                     if (auth.authenticated())
                     { 
-                        //TODO
-                        //ouvrir un changeset avec oauth
-                        // en callback, envoyer le noeud
-                        // en callback, fermer le changeset
-                        // en callback, console.log("ça a fonctionné")
-                        //auth.xhr({ method: 'GET', path: '/api/0.6/node/' + OSM_id }, function(err, res){console.log(res); } );
+                        //open a changeset with oauth
+                        var xml_changeset = "<osm><changeset><tag k='created_by' v='OpenBeerMap javascript editor'/><tag k='comment' v='OSM js editor - test, developpement'/></changeset></osm>";                        
+                        auth.xhr(
+                            {
+                                method: 'PUT',
+                                path: '/api/0.6/changeset/create', 
+                                options: { header: { 'Content-Type': 'text/xml' } }, 
+                                content: xml_changeset 
+                            },
+                            function(err, res){
+                                if (err) {
+                                    console.log('ERROR on put changeset: ' + err.response);
+                                    return
+                                    }
+                                    
+                                //prepare put node/way 
+                                changeset_id = res;                                   
+                                data_to_send = prepare_put_node_or_way(OSM_xml, changeset_id, OSM_id, "node")
+                                
+                                //put new node/ way
+                                auth.xhr(
+                                    {
+                                        method: 'PUT',
+                                        path: '/api/0.6/' + 'node' + '/' + OSM_id, 
+                                        options: { header: { 'Content-Type': 'text/xml' } }, 
+                                        content: data_to_send 
+                                    },
+                                    function(err, res){
+                                        if (err) {
+                                            console.log('ERROR on put node/way : ' + err.response);
+                                            return
+                                            }
+                                            
+                                        //close changeset 
+                                        auth.xhr(
+                                            {
+                                                method: 'PUT',
+                                                path: '/api/0.6/changeset/' + changeset_id + '/close',  
+                                            },
+                                            function(err, res){
+                                                if (err) {
+                                                    console.log('ERROR on put changeset/close : ' + err.response);
+                                                    return
+                                                    }
+                                                else {console.log("Successfully modification of an OSM object !")}
+                                            }//end of callback - close changeset
+                                        );
+                                    }//end of callback - put node/way
+                                );
+                                } //end of callback - open changeset
+                        );
                     }
                     else
                     {
@@ -126,3 +171,28 @@ function form_from_user(form) {
         //post-processing éventuel
         
         };
+        
+
+function prepare_put_node_or_way(xml, changeset_id, id, OSM_type)
+{
+    if(OSM_type != "way" && OSM_type != "node")
+    {
+        console.log("ERROR: wrong OSM type: " + OSM_type);
+        return false;
+    }
+    
+    var tags = xml.documentElement.getElementsByTagName(OSM_type);
+    console.log("current changeset: " + tags[0].getAttribute('changeset') + ", changing to " + changeset_id)
+    tags[0].setAttribute('changeset', changeset_id); 
+       
+    /*
+    var tags = xml.documentElement.getElementsByTagName("tag");    	
+    for (var i in tags)
+    {
+        console.log(tags[i].getAttribute("k") + " : " + tags[i].getAttribute("v"));
+    }*/
+    
+    
+    var serialized = xml_to_string(xml);
+    if(serialized !== false) { return serialized;}
+}
