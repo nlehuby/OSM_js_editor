@@ -7,7 +7,7 @@ function get_node_or_way(id, OSM_type)
     var xhr = new XMLHttpRequest();
 
     xhr.open("GET", "https://api.openstreetmap.org/api/0.6/" + OSM_type + "/" + id, false);
-    xhr.setRequestHeader("Authorization", basic_auth());
+    //xhr.setRequestHeader("Authorization", basic_auth());
     xhr.send();
 
     console.log("GET " + OSM_type + "/ with status " + xhr.status);

@@ -7,6 +7,8 @@
 function init_form_from_OSM(form,OSM_id) { 
 //fonction d'affichage des info OSM dans le formulaire
 
+if (auth.authenticated())
+{ auth.xhr({ method: 'GET', path: '/api/0.6/node/' + OSM_id }, function(err, res){console.log(res); OSM_xml = res; /* ko, passer toute la fonction en callback*/ } );}
         // récupération des valeurs actuelles 
         OSM_xml = get_node_or_way(OSM_id, "node")
         name_src = get_tag(OSM_xml,"name") ; if (name_src == "undefined" ) {name_src = ""}  ;   
