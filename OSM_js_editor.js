@@ -6,9 +6,19 @@
 
 function init_form_from_OSM(form,OSM_id) { 
 //fonction d'affichage des info OSM dans le formulaire
+    
+        //affichage des bandeaux d'avertissement
+        if (auth.authenticated())
+        { auth.xhr({ method: 'GET', path: '/api/0.6/node/' + OSM_id }, function(err, res){console.log(res); OSM_xml = res; /* ko, passer toute la fonction en callback TODO*/ } );
+        document.getElementById('alert_no_auth').style.display = 'none';
+        document.getElementById('alert_auth').style.display = 'block';        
+        }
+        else
+        {
+            document.getElementById('alert_auth').style.display = 'none';
+            document.getElementById('alert_no_auth').style.display = 'block';
+        }
 
-if (auth.authenticated())
-{ auth.xhr({ method: 'GET', path: '/api/0.6/node/' + OSM_id }, function(err, res){console.log(res); OSM_xml = res; /* ko, passer toute la fonction en callback*/ } );}
         // récupération des valeurs actuelles 
         OSM_xml = get_node_or_way(OSM_id, "node")
         name_src = get_tag(OSM_xml,"name") ; if (name_src == "undefined" ) {name_src = ""}  ;   
