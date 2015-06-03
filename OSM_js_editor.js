@@ -6,6 +6,18 @@
 
 function init_form_from_OSM(form,OSM_id) { 
 //fonction d'affichage des info OSM dans le formulaire
+    
+        //affichage des bandeaux d'avertissement
+        if (auth.authenticated())
+        { 
+            document.getElementById('alert_no_auth').style.display = 'none';
+            document.getElementById('alert_auth').style.display = 'block';        
+        }
+        else
+        {
+            document.getElementById('alert_auth').style.display = 'none';
+            document.getElementById('alert_no_auth').style.display = 'block';
+        }
 
         // récupération des valeurs actuelles 
         OSM_xml = get_node_or_way(OSM_id, "node")
@@ -84,19 +96,11 @@ function form_from_user(form) {
     	console.log(envoi)
         if (envoi != 0)
                 {
-                //ouvrir un changeset
-                changeset_id = put_changeset()
-                if (changeset_id != "Couldn't authenticate you")
-                    {
-                    //envoyer le nouveau node
-                    put_node_or_way(OSM_xml, changeset_id, OSM_id, "node")
-                    
-                    //fermer le changeset
-                    close_changeset(changeset_id);
-                    }
-                else {console.log("auth fail")}
+                    send_data_to_osm(OSM_xml, OSM_id, "node")
                 }
     
         //post-processing éventuel
-        
         };
+        
+
+
