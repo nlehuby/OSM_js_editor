@@ -49,14 +49,18 @@ function edit_tag(xml, OSM_type, key, value)
     {
         var parentNode = xml.getElementsByTagName("way")[0];
     }
+    if(OSM_type === 'relation')
+    {
+        var parentNode = xml.getElementsByTagName("relation")[0];
+    }    
     parentNode.appendChild(newTag); 
     
     /*
     for (var i in tags)
     {
         console.log(tags[i].getAttribute("k") + ": " + tags[i].getAttribute("v"));
-    }
-    */
+    }*/
+    
     return;
 
 }
@@ -109,14 +113,15 @@ function xml_to_string(xml_node)
     }
 }
 
-function prepare_put_changeset()
+function prepare_put_changeset(changeset_comment)
 {
-return "<osm><changeset><tag k='created_by' v='OpenBeerMap javascript editor'/><tag k='comment' v='OSM js editor - test, developpement'/></changeset></osm>"
+    changeset_comment = changeset_comment || "Modification avec OBM_js_editor";
+    return "<osm><changeset><tag k='created_by' v='OpenBeerMap javascript editor'/><tag k='comment' v='" + changeset_comment + "'/></changeset></osm>"
 }
 
 function prepare_put_node_or_way(xml, changeset_id, id, OSM_type)
 {
-    if(OSM_type != "way" && OSM_type != "node")
+    if(OSM_type != "way" && OSM_type != "node" && OSM_type != "relation")
     {
         console.log("ERROR: wrong OSM type: " + OSM_type);
         return false;
@@ -139,11 +144,11 @@ function prepare_put_node_or_way(xml, changeset_id, id, OSM_type)
 }
 
 /* generic */
-function send_data_to_osm(xml, OSM_id, OSM_type)
+function send_data_to_osm(xml, OSM_id, OSM_type, comment)
 {
     if (auth.authenticated())
     { 
-        send_data_to_osm_oauth(xml, OSM_id, OSM_type)
+        send_data_to_osm_oauth(xml, OSM_id, OSM_type, comment)
     }
     else
     {
@@ -204,10 +209,10 @@ function put_changeset(){
 }
 
 /* With oauth */ 
-function send_data_to_osm_oauth(xml, OSM_id, OSM_type)
+function send_data_to_osm_oauth(xml, OSM_id, OSM_type, comment)
 { 
     //open a changeset with oauth
-    var xml_changeset = prepare_put_changeset();                        
+    var xml_changeset = prepare_put_changeset(comment);                        
     auth.xhr(
         {
             method: 'PUT',
@@ -229,7 +234,7 @@ function send_data_to_osm_oauth(xml, OSM_id, OSM_type)
             auth.xhr(
                 {
                     method: 'PUT',
-                    path: '/api/0.6/' + 'node' + '/' + OSM_id, 
+                    path: '/api/0.6/' + OSM_type + '/' + OSM_id, 
                     options: { header: { 'Content-Type': 'text/xml' } }, 
                     content: data_to_send 
                 },
@@ -250,7 +255,7 @@ function send_data_to_osm_oauth(xml, OSM_id, OSM_type)
                                 console.log('ERROR on put changeset/close : ' + err.response);
                                 return
                                 }
-                            else {console.log("Successfully modification of an OSM object !")}
+                            else {console.log("You've successfully modified an OSM object !")}
                         }//end of callback - close changeset
                     );
                 }//end of callback - put node/way
