@@ -1,6 +1,6 @@
 <html>
 <head>
-    
+    <meta charset="UTF-8">
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
@@ -13,7 +13,7 @@
 
 
 
-<legend>Entrer le code du noeud que vous voulez éditer :</legend>
+<legend>Entrer l'identifiant du noeud que vous voulez éditer :</legend>
 <!-- Text input-->
 <div class="form-group">
   <div class="col-md-4">
@@ -38,7 +38,7 @@
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 		<h4 class="modal-title">Édition du bar dans OpenBeerMap</h4>
         <div class="alert alert-danger" role="alert" id="alert_no_auth">Vous n'êtes pas connecté à OpenStreetMap. Vos contributions seront post-modérées. blabla, bouton de connexion ...</div>
-        <div class="alert alert-success" role="alert" id="alert_auth">Vous êtes connecté à OpenStreetMap. blabla, user ...</div>        
+        <div class="alert alert-success" role="alert" id="alert_auth">Vous êtes connecté à OpenStreetMap. blabla, bienvenue ...</div>        
       </div>
       <div class="modal-body">
 	  <form class="form-horizontal" name="edit_form">
@@ -122,7 +122,7 @@
 
         function done(err, res) {
             if (err) {
-                document.getElementById('user').innerHTML = 'error! try clearing your browser cache';
+                document.getElementById('user').innerHTML = 'Il y a eu une erreur à la connexion';
                 document.getElementById('user').style.display = 'block';
                 return;
             }
@@ -167,12 +167,12 @@
         update();
         </script>
     
-<script language="javascript">
-function test_edit(){
-OSMid = document.getElementById('textinput').value
-init_form_from_OSM(edit_form,OSMid)
-$('#myModal').modal()
-};
-</script>
+    <script language="javascript">
+        function test_edit(){
+            OSMid = document.getElementById('textinput').value
+            init_form_from_OSM(edit_form,OSMid)
+            $('#myModal').modal()
+        };
+    </script>
 </body>
 </html>
