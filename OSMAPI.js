@@ -124,9 +124,9 @@ function prepare_put_node_or_way(xml, changeset_id, id, OSM_type) {
 }
 
 /* generic */
-function send_data_to_osm(xml, OSM_id, OSM_type, comment) {
+function send_data_to_osm(xml, OSM_id, OSM_type, optional_comment, optional_callback) {
     if (auth.authenticated()) {
-        send_data_to_osm_oauth(xml, OSM_id, OSM_type, comment)
+        send_data_to_osm_oauth(xml, OSM_id, OSM_type, optional_comment, optional_callback)
     } else {
         send_data_to_osm_basic_auth(xml, OSM_id, OSM_type)
     }
@@ -148,15 +148,14 @@ function send_data_to_osm_basic_auth(xml, OSM_id, OSM_type) {
 }
 
 function put_node_or_way(xml, changeset_id, id, OSM_type) {
-    serialized = prepare_put_node_or_way(xml, changeset_id, id, OSM_type) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("PUT", "https://api.openstreetmap.org/api/0.6/" + OSM_type + "/" + id, false);
-        xhr.setRequestHeader("Authorization", basic_auth());
-        xhr.send(serialized);
-        console.log("PUT " + OSM_type + "/ with status " + xhr.status);
-        return true;
-    }
-    return false;
+    serialized = prepare_put_node_or_way(xml, changeset_id, id, OSM_type)
+    var xhr = new XMLHttpRequest();
+    xhr.open("PUT", "https://api.openstreetmap.org/api/0.6/" + OSM_type + "/" + id, false);
+    xhr.setRequestHeader("Authorization", basic_auth());
+    xhr.send(serialized);
+    console.log("PUT " + OSM_type + "/ with status " + xhr.status);
+    return true;
+
 }
 
 function close_changeset(id) {
@@ -181,9 +180,9 @@ function put_changeset() {
 }
 
 /* With oauth */
-function send_data_to_osm_oauth(xml, OSM_id, OSM_type, comment) {
+function send_data_to_osm_oauth(xml, OSM_id, OSM_type, optional_comment, optional_callback) {
     //open a changeset with oauth
-    var xml_changeset = prepare_put_changeset(comment);
+    var xml_changeset = prepare_put_changeset(optional_comment);
     auth.xhr({
             method: 'PUT',
             path: '/api/0.6/changeset/create',
@@ -231,7 +230,10 @@ function send_data_to_osm_oauth(xml, OSM_id, OSM_type, comment) {
                                 console.log('ERROR on put changeset/close : ' + err.response);
                                 return
                             } else {
-                                console.log("You've successfully modified an OSM object !")
+                                console.log("You've successfully modified an OSM object !");
+                                if (optional_callback !== undefined) {
+                                    optional_callback(changeset_id, res);
+                                }
                             }
                         } //end of callback - close changeset
                     );
