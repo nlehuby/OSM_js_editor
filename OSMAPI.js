@@ -86,8 +86,8 @@ function del_rel_member(xml, member_type, member_ref) {
     var members = xml.documentElement.getElementsByTagName("member");
     for (var i = (members.length - 1); i >= 0; i--) { //going down to remove the last item matching
         if ((members[i].getAttribute("type") === member_type) && //ex: "node"
-            (members[i].getAttribute("ref") === member_ref)  // ex: "1321886484" (osm id)
-           ) {
+            (members[i].getAttribute("ref") === member_ref) // ex: "1321886484" (osm id)
+        ) {
             members[i].parentNode.removeChild(members[i]);
             return true;
         }
