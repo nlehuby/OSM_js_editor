@@ -12,11 +12,12 @@ Les deux modes d'authentification d'OSM sont supportées : basic_auth (par login
 
 Pour l'utiliser, renseigner les informations dans le fichier auth.js (en s'inspirant de default.auth.js)
 
-Pour utiliser Oauth, il faut au préalable avoir enregistré son application : https://www.openstreetmap.org/user/your_OSM_login>/oauth_clients/new
+Pour utiliser Oauth, il faut poser le fichier land.html à côté de la page où l'authentification se déroulera et enregistrer son application : https://www.openstreetmap.org/user/your_OSM_login>/oauth_clients/new
 
 ## Exemples d'utilisation
 
-* exemple dans le repo ci-joint
+* exemple simple dans le présent repo
+* exemple simple, avec Vue Form Generator, dans le présent repo
 * OpenBeerMap (pour un formulaire plus complexe)
 
 ## Utilisation
@@ -29,5 +30,3 @@ Pour utiliser Oauth, il faut au préalable avoir enregistré son application : h
 
 * La gestion des conflits n'est pas implémentée
 * etc
-
-

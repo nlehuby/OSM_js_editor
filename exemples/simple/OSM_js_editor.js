@@ -31,14 +31,14 @@ function init_form_from_OSM(form, OSM_id) {
     //écriture des valeurs dans le formulaire
     // id du node, pour pouvoir soumettre le formulaire plus tard
     document.getElementById('OSM_id').value = OSM_id
-        // nom du bar
+    // nom du bar
     document.getElementById('bar-name').value = name_src
-        // horaires d'ouverture
+    // horaires d'ouverture
     document.getElementById('opening_hours').value = opening_src
 
     //lien iD tout en bas du formulaire
     document.getElementById("singlelink").href = "http://www.openstreetmap.org/edit?editor=id&node=" + OSM_id.toString()
-        //tout le reste
+    //tout le reste
     var inputForm = form.getElementsByTagName("input"); // récupération ds éléments de type input du formulaire
     var n = inputForm.length;
     for (i = 0; i < n; i++) {
