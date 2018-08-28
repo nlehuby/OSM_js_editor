@@ -1,6 +1,8 @@
 OSM_js_editor
 =============
 
+**Ce projet a fait son temps, si vous cherchez une lib d'édition OSM digne de ce nom, jetez plutôt un coup d'oeil à [osm-request](https://github.com/osmlab/osm-request)**
+
 Lib js d'édition OSM, issue du projet OpenBeerMap.
 
 Permet d'éditer les tags des objets OSM (node, way, relation) et d'ajouter / supprimer des éléments dans des relations.
