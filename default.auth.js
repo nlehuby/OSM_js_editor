@@ -2,7 +2,10 @@ function basic_auth() {
     return "Basic " + btoa("nickname" + ":" + "you-will-never-guess");
 }
 
-var auth = osmAuth({
-    oauth_secret: '9WfJnwQxDvvYagx1Ut0tZBsOZ0ZCzAvOje3u1TV0',
-    oauth_consumer_key: 'WLwXbm6XFMG7WrVnE8enIF6GzyefYIN6oUJSxG65'
+var auth = osmAuth.osmAuth({
+    client_id: 'to-be-changed',
+    redirect_uri: window.location.origin + window.location.pathname + "land.html",
+    scope: "read_prefs write_api",
+    singlepage: false,
+    url: 'https://www.openstreetmap.org'
 });
