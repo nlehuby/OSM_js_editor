@@ -6,8 +6,10 @@
     <body>
         <!-- cette page est nécessaire pour faire fonctionner l'authentification oauth -->
         <script>
-            opener.authComplete(window.location.href);
+        if (new URLSearchParams(location.search).has("code")) {
+            new BroadcastChannel("osm-api-auth-complete").postMessage(location.href);
             window.close();
+        }
         </script>
     </body>
 
